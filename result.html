@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>結果ページ</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        .result {
+            font-size: 4rem;
+            font-weight: bold;
+            color: #4caf50;
+            margin-top: 20px;
+        }
+
+        .result-image {
+            margin: auto;
+            width: 500px; /* 幅を500pxに固定 */
+            max-width: 90%; /* 画面幅の90%を超えないようにする */
+            height: auto; /* アスペクト比を維持 */
+            left: 50%; /* 親要素の幅の50% */
+        }
+
+        .backButton {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #4caf50;
+            color: white;
+            text-decoration: none;
+            border-radius: 15px;
+            display: inline-block;
+            font-size: 3rem;
+        }
+    </style>
+</head>
+<body>
+    <h1>ガチャ結果</h1>
+    <p class="result" id="result">結果を取得中...</p>
+    <img id="result-image" class="result-image" src="" alt="ガチャ結果の画像" style="display: none;">
+    <a href="index.html#single-gacha-button" class="backButton" >戻る</a>
+
+    <script>
+        // クエリパラメータから結果を取得
+        const params = new URLSearchParams(window.location.search);
+        const result = params.get('item');
+        const result02 = params.get('item02');
+
+        // 結果を表示
+        // if (result) {
+        //     document.getElementById('result').textContent = result;
+        // } else {
+        //     document.getElementById('result').textContent = 'エラー: 結果がありません。';
+        // }
+        
+        // URLパラメータから結果を取得
+        const singleResult = params.get('single');
+
+        // 結果を表示するテキスト
+        const resultText = document.getElementById('result');
+        if (result) {
+            resultText.textContent = ` ${result}`;
+
+            // 画像マッピング
+            const singleImageMapping = {
+                "澪": "images/mio.png",
+                "ワンカップ": "images/onecup.png",
+                "上善如水": "images/jozen.png",
+                "まる": "images/maru.png",
+                "松竹梅": "images/syotiku.png",
+                "キンミヤ": "images/kinmiya.png",
+                "鏡月": "images/kyogetu.png",
+                "いいちこ": "images/iichiko.png",
+                "黒霧島": "images/kurogiri.png",
+                "吟香鳥飼": "images/torikai.png",
+                "JJ": "images/jj.png",
+                "チャミスル": "images/chami.png",
+                "グレープフルーツサワー": "images/gurehuru.png",
+                "グレープサワー": "images/grepu.png",
+                "ほろよい": "images/horoyoi.png",
+            };
+
+            // 結果に対応する画像を取得
+            const resultImage = document.getElementById('result-image');
+            const imagePath = singleImageMapping[result];
+
+            if (imagePath) {
+                resultImage.src = imagePath;
+                resultImage.style.display = 'block';
+            } else {
+                resultImage.alt = "画像が見つかりません";
+            }
+        } else {
+            resultText.textContent = "エラー: 結果がありません。";
+        }
+
+    </script>
+</body>
+</html>

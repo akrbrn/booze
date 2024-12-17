@@ -1,0 +1,667 @@
+/* style.css */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #ffb922;
+    font-family: Arial, sans-serif;
+    font-size: 20px;
+    margin: 0;
+    padding: 0;
+    line-height: 1.5;
+    font-family: 'YDW Bananaslip Plus', sans-serif;
+
+}
+
+.text-default {
+    font-size: 1.3rem; /* 通常の文字サイズ */
+}
+@font-face {
+    font-family: 'YDW Bananaslip Plus';
+    src: url('YDWbananaslipplus.otf"') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+/* 背景画像を設定 */
+header {
+    background-color: #ffb922; /* 好きな色に変更 */
+    background-image: url('images/top.svg'); /* 画像のパス */
+    background-size: cover; /* 全体に画像をカバー */
+    background-position: center; /* 画像の中央を表示 */
+    background-repeat: no-repeat;
+    height: 120vh; /* ビューポート全体の高さに設定 */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    text-align: center;
+    z-index: 1000;
+}
+
+h1 {
+    font-size: 6vw; /* スマホサイズに適したフォントサイズ */
+    margin: 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo-image {           /* 左上ロゴ用 */
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    width: 50px; /* ロゴのサイズ調整 */
+    height: auto;
+    z-index: 1000; /* レイヤーの一番上にする */
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* ロード画面のスタイル */
+#loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: black; /* 動画が表示されない場合の背景色 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* 最前面に表示 */
+}
+
+/* 動画のスタイル */
+#loading-video {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+/* メインコンテンツの非表示 */
+#main-content {
+    display: none; /* ロード画面中は非表示 */
+}
+
+/* タイトルロゴアニメーション */
+.animated-logo {
+    width: 150vw; /* ロゴのサイズ */
+    max-width: 300px; /* 大きすぎないように上限を設定 */
+    position: absolute;
+    top: 150px; /* 画面上から100pxの位置 */
+    left: 20%;
+    transform: translateX(-50%); /* 水平中央に配置 */
+    animation: logoBounce 3s ease-in-out infinite; /* 3秒ごとに繰り返し */
+}
+
+@keyframes wobble {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(10deg); }
+    75% { transform: rotate(-10deg); }
+}
+
+
+@keyframes stop {
+    0% { transform: scale(1); }
+    100% { transform: scale(1); } /* 変化なし（動かない状態） */
+}
+
+.animated-logo {
+    animation: wobble 5s ease, stop 0s 5s forwards; 
+    /* wobbleで揺らぎ、その後stopアニメーションで動きを止める */
+}
+
+
+
+/* ハンバーガーメニューボタン */
+/* .menu-toggle {
+    font-size: 50px;
+    color: #f55403;
+    background: none;
+    border: none;
+    position: fixed;
+    top: 10px;
+    right: 15px;
+    cursor: pointer;
+    z-index: 1000; /* レイヤーの一番上にする */
+
+    .menu-toggle {
+        cursor: pointer;
+        display: inline-block;
+        width: 50px;
+        height: 60px;
+        top: 20px;
+        right: 30px;
+        position: fixed;
+        z-index: 1002; /* レイヤーの一番上にする */
+    }
+    
+    .menu-toggle span {
+        display: block;
+        width: 100%;
+        height: 6px;
+        background-color: #f55403;
+        margin: 12px 0;
+        transition: all 0.3s;
+    }
+    
+    .menu-toggle.active span:nth-child(1) {
+        transform: translateY(18px) rotate(45deg);
+    }
+    
+    .menu-toggle.active span:nth-child(2) {
+        opacity: 0;
+    }
+    
+    .menu-toggle.active span:nth-child(3) {
+        transform: translateY(-18px) rotate(-45deg);
+    }
+    
+.nav-menu {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 250px;
+    height: 100%;
+    background-color: #f55403;
+    transition: transform 0.3s ease;
+    transform: translateX(100%); /* メニューを右外に配置 */
+    z-index: 1001;
+    }
+    
+    .nav-menu.active {
+        left: 0;
+    }
+    
+
+.nav-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 999; /* メニューよりも下に配置 */
+}
+
+
+.nav-overlay.active {
+    display: block;
+}
+
+nav {
+    background-color: #f0a500;
+    text-align: center;
+    display: none; /* 初期状態では非表示 */
+}
+
+
+/* ナビゲーションメニュー */
+#navMenu {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #f0a500;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    opacity: 0; /* 非表示状態 */
+    pointer-events: none; /* クリックできない状態にする */
+}
+
+#navMenu.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* ナビゲーションリスト */
+#navMenu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+}
+
+#navMenu li {
+    /* padding: 15px 20px; */
+    margin: 100px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+#navMenu li a {
+    text-decoration: none;
+    font-size: 2rem;
+    color: #333;
+}
+
+#navMenu li a:hover {
+    color: #f55403; /* ホバー時に色を変更 */
+}
+
+/* メニューが開いた時 */
+.menu-toggle.active + .menu-overlay + .nav-menu {
+    transform: translateX(0); /* メニューがスライドして表示 */
+}
+
+section {
+    padding: 20px;
+    text-align: center;
+}
+
+@media (max-width: 600px) {
+    nav ul li {
+        display: block;
+        margin: 10px 0;
+    }
+    .logo-image {
+        width: 50px;
+    }
+}
+
+
+/* ハンバーガーメニューが開いた状態 */
+nav.active {
+    display: block;
+}
+
+/* スライドショー */
+#slideshow {
+    position: relative;
+    margin: auto;
+    display: flex;
+    overflow: hidden; /* 画像がはみ出さないようにする */
+}
+
+.slideshow-container {
+    display: flex;
+    animation: slide 10s infinite linear 0.5s both; /* スライドを9秒で切り替えるアニメーション */
+    transition: transform 1s ease;  /* transformにスムーズな遷移を設定 */
+}
+
+.slide {
+    width: calc(100vw / 4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.slide img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px; /* 画像に丸みをつける */
+}
+
+@keyframes slide {
+    from {
+        transform: translateX(-100%);
+    }
+        to {
+        transform: translateX(0%);
+    }
+}
+
+#slideshow1 {
+    position: relative;
+    margin: auto;
+    display: flex;
+    overflow: hidden; /* 画像がはみ出さないようにする */
+}
+
+.slideshow1-container {
+    display: flex;
+    animation: slide1 10s infinite linear 0.5s both; /* スライドを9秒で切り替えるアニメーション */
+    transition: transform 1s ease;  /* transformにスムーズな遷移を設定 */
+}
+
+.slide1 {
+    width: calc(100vw / 4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.slide1 img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px; /* 画像に丸みをつける */
+}
+
+@keyframes slide1 {
+    from {
+        transform: translateX(0%);
+    }
+        to {
+        transform: translateX(-100%);
+    }
+}
+
+/* ボタン */
+.button-wrapper {
+    position: relative; /* ボタンの周りの線を絶対位置で配置 */
+    display: inline-block;
+}
+
+.circle-button {
+    width: 200px;           /* ボタンの幅 */
+    height: 200px;          /* ボタンの高さ */
+    border-radius: 50%;    /* 円形にするためにボーダー半径を50%に */
+    background-color: #F8E7CB; /* ボタンの背景色 */
+    color: #4b0a00;          /* テキストの色 */
+    font-size: 35px;       /* テキストサイズ */
+    border: none;          /* 枠線なし */
+    cursor: pointer;       /* カーソルをポインタに */
+    display: flex;         /* 中央揃えのためにフレックスボックスを使用 */
+    align-items: center;   /* 縦方向の中央揃え */
+    justify-content: center; /* 横方向の中央揃え */
+    transition: background-color 0.3s ease; /* ホバー時のアニメーション */
+    box-shadow: 0px 10px 10px rgba(0, 0, 1, 0.3); /* 影の設定 */
+    position: relative;
+    z-index: 2; /* ボタンが線の上に表示されるように */
+    font-family: 'YDW Bananaslip Plus', sans-serif;
+
+}
+
+/* 画像を背景として設定 */
+.circle-button::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('images/arrow.png'); /* 使用する画像のURL */
+    background-size: cover; /* 画像がボタンのサイズに合わせてリサイズ */
+    background-position: center; /* 画像を中央に配置 */
+    z-index: -1; /* 画像がボタンの背面に表示されるように */
+    animation: rotateImage 5s linear infinite; /* 回転のアニメーション */
+    transform: scaleX(-1); /* 水平方向に反転 */
+}
+
+.circle-button:hover {
+    background-color: #4b0a00; /* ホバー時に色を少し変更 */
+    color: #F8E7CB;
+    box-shadow: 0px 15px 15px rgba(0, 0, 1, 0.4); /* ホバー時の影 */
+}
+
+.button-container {
+    display: flex;           /* フレックスボックスを使用 */
+    justify-content: center; /* 横方向の中央揃え */
+    height: 35vh;           /* 画面の高さいっぱいに */
+    align-items: center;
+}
+
+/* 回転のアニメーション */
+@keyframes rotateImage {
+    0% {
+        transform: rotate(0deg)scaleX(-1); /* 初期状態 */
+    }
+    100% {
+        transform: rotate(360deg)scaleX(-1); /* 360度回転 */
+    }
+}
+
+/* セクションアニメーション */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* 初期状態 */
+.section {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+
+/* 表示状態 */
+.section.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* リスト */
+/* 全体のコンテナ */
+.list-container {
+    margin: 20px;
+}
+
+/* ジャンル見出し */
+.list-header {
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 10px;
+    background-color: #f2f2f2;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
+
+/* リスト全体 */
+#single-gacha-button {
+    scroll-margin-top: 50vh; /* ビューポートの半分だけ上に余白を取る */
+}
+
+#double-gacha-button {
+    scroll-margin-top: 50vh; /* ビューポートの半分だけ上に余白を取る */
+}
+
+.single-gacha-list {
+    margin: 0;
+    padding: 10px;
+    list-style-type: none;
+    border-top: none;
+    border-radius: 0 0 5px 5px;
+}
+
+/* 初期状態で非表示 */
+.hidden {
+    display: none;
+}
+
+/* 各リストアイテム */
+.list-item {
+    margin: 5px 0;
+    list-style-type: none;
+    font-size: 25px;
+    text-align: left; /* 左寄せ */
+}
+
+.list-item-sake {
+    margin: 5px 0;
+    list-style-type: none;
+    font-size: 25px;
+    text-align: left; /* 左寄せ */
+}
+
+.list-item-wari {
+    margin: 5px 0;
+    list-style-type: none;
+    font-size: 25px;
+    text-align: left; /* 左寄せ */
+}
+
+
+#gif-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.5); /* 背景を暗くする */
+    z-index: 1000; /* 他の要素より上に表示 */
+
+}
+
+
+#gif-container img {
+    max-width: 100%;
+    height: auto;
+}
+
+
+/* コメント欄 */
+.comment-section {
+    width: 100%;
+    max-width: 600px;
+    margin: 20px auto;
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 8px;
+    background: #f9f9f9;
+}
+
+/* ラベル */
+.comment-section label {
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+/* ペンネーム入力 */
+.pen-name {
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    margin-top: 5px;
+}
+
+/* 年代選択 */
+.age {
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    margin-top: 5px;
+    appearance: none; /* プラットフォーム固有のスタイルを削除 */
+    background: #fff;
+}
+
+textarea {
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 10px;
+    resize: vertical;
+}
+
+button {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    margin-top: 10px;
+    cursor: pointer;
+    margin-top: 10px;
+    width: 100%; /* 全幅で表示 */
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+#commentList {
+    margin-top: 20px;
+}
+
+
+.comment {
+    display: flex;
+    flex-direction: column; /* 縦に並べる */
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #fff;
+    word-wrap: break-word; /* 長い文字列を折り返す */
+    white-space: normal; /* テキストが折り返されるようにする */
+
+}
+
+.comment .meta {
+    font-size: 0.9em;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.comment .comment-text {
+    margin-top: 5px;
+    font-size: 1em;
+    flex-grow: 1; /* コメント部分をボタン以外のスペースに広げる */
+    /* margin-right: 10px; ボタンとの間隔を作る */
+}
+
+.comment .delete-button {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem; /* ボタンの文字サイズを調整 */
+    width: auto; /* ボタンの横幅を自動で調整 */
+    /* height: 30px; 高さを調整 */
+    /* line-height: 30px; ボタン内の文字を垂直中央に配置 */
+    text-align: center; /* ボタン内のテキストを中央に配置 */
+    flex-shrink: 0; /* ボタンが縮まないようにする */
+    align-self: flex-end; /* 削除ボタンを右端に配置 */
+}
+
+.comment .delete-button:hover {
+    background-color: #d32f2f;
+}
+
+
+/* タブレットやPC用のスタイル */
+@media (min-width: 768px) {
+    .background-image {
+        flex-direction: row; /* 横並びに配置 */
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 2em; /* タブレット用にフォントサイズを大きく */
+        margin: 30px;
+        align-items: center;
+    }
+
+    .animated-logo {
+        width: 1000px; /* PC用にロゴを拡大 */
+    }
+}
+
+@media (min-width: 1024px) {
+    body {
+        font-size: 18px; /* PC向けのフォントサイズ */
+    }
+
+    .background-image {
+        padding: 40px;
+        justify-content: space-between; /* PC用にさらに広げる */
+    }
+}

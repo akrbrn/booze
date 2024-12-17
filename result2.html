@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ガチャ結果</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        .result {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #4caf50;
+            margin-top: 20px;
+        }
+        .back-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #4caf50;
+            color: white;
+            text-decoration: none;
+            border-radius: 15px;
+            display: inline-block;
+            font-size: 3rem;
+        }
+    </style>
+</head>
+<body>
+    <h1>ガチャ結果</h1>
+    <p class="result" id="result">結果を取得中...</p>
+
+    <script>
+        //取得したアイテムをHTMLに持ってくる
+        const getQueryParams = () => {
+            const params = new URLSearchParams(window.location.search);
+            return {
+                fruit: params.get("fruit"),
+                vegetable: params.get("vegetable"),
+            };
+        };
+
+        // 結果表示
+        document.addEventListener("DOMContentLoaded", () => {
+            const { fruit, vegetable } = getQueryParams();
+            const resultElement = document.getElementById("result");
+
+            if (fruit && vegetable) {
+                resultElement.textContent = `${fruit} X ${vegetable}`;
+            } else {
+                resultElement.textContent = "No selection was made.";
+            }
+        });
+    </script>
+    <a href="index.html#double-gacha-button" class="back-button">戻る</a>
+
+</body>
+</html>
