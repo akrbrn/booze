@@ -78,8 +78,8 @@
 
             <section id="about" class="section">
                 <h2>酒ガチャwebサイトBooze!!とは？</h2>
-                <p class="text-default">お酒を飲むのにお酒選びに迷ったり、いつもとは違うお酒を飲みたいと思ったことはありませんか？<br>
-                    そんなあなたに使ってもらいたいサイトです的な</p>
+                <p class="text-default">お酒を飲むのにお酒選びに迷ったり、いつもとは違うお酒を飲みたいと思ったそこのあなた！<br>
+                    このサイトでお酒を選んでみませんか？</p>
             </section>
 
             <section id="slideshow1" class="section">
@@ -119,6 +119,9 @@
                 </div>
             </section> 
 
+            <section class="section">
+                <p class="text-default">今日のお酒はこれ！<br>ランダムで１つお酒が出てくるよ！<br>（ラインナップから苦手なお酒のチェックを外してね）</p>
+        </section>
 
             <div id="gif-container">
                 <img id="gif-image" src="images/gacha.GIF" alt="Animated GIF">
@@ -128,7 +131,12 @@
             <section class="section"><h1>ラインナップ</h1>
                 <div class="list-container" >
                     <div class="genre">
-                    <div class="list-header">日本酒</div>
+                    <div class="list-header">
+                        <label class="single-all-label">
+                            <input type="checkbox" class="single-all-checkbox"> 
+                        </label> <!-- チェックボックスのように表示 -->
+                        日本酒 <span class="toggle-icon">＋</span>
+                    </div>
                         <ul class="single-gacha-list hidden">
                             <li class="list-item">
                                 <label><input type="checkbox" name="fruits" value="澪"> 澪</label>
@@ -148,7 +156,12 @@
                         </ul>
                     </div>
                 <div class="genre">
-                    <div class="list-header">焼酎</div>
+                    <div class="list-header">
+                        <label class="single-all-label">
+                            <input type="checkbox" class="single-all-checkbox"> 
+                        </label> <!-- チェックボックスのように表示 -->
+                        焼酎 <span class="toggle-icon">＋</span>
+                    </div>
                     <ul class="single-gacha-list hidden">
                         <li class="list-item">
                             <label><input type="checkbox" name="vegetables" value="キンミヤ"> キンミヤ</label>
@@ -174,7 +187,12 @@
                     </ul>
                 </div>
                 <div class="genre">
-                    <div class="list-header">缶チューハイ</div>
+                    <div class="list-header">
+                        <label class="single-all-label">
+                            <input type="checkbox" class="single-all-checkbox"> 
+                        </label> <!-- チェックボックスのように表示 -->
+                        缶チューハイ <span class="toggle-icon">＋</span>
+                    </div>
                     <ul class="single-gacha-list hidden">
                         <li class="list-item">
                             <label><input type="checkbox" name="vegetables" value="グレープフルーツサワー"> グレープフルーツサワー</label>
@@ -186,7 +204,7 @@
                             <label><input type="checkbox" name="vegetables" value="ほろよい"> ほろよい</label>
                         </li>
                         <li class="list-item">
-                            <label><input type="checkbox" name="vegetables" value="こだわり酒場の檸檬サワー"> こだわり酒場の檸檬サワー</label>
+                            <label><input type="checkbox" name="vegetables" value="こだわり酒場のれもんサワー"> こだわり酒場のれもんサワー</label>
                         </li>
                         <li class="list-item">
                             <label><input type="checkbox" name="vegetables" value="贅沢絞り"> 贅沢絞り</label>
@@ -209,7 +227,12 @@
                     </ul>
                 </div>
                 <div class="genre">
-                    <div class="list-header">ビール</div>
+                    <div class="list-header">
+                        <label class="single-all-label">
+                            <input type="checkbox" class="single-all-checkbox"> 
+                        </label> <!-- チェックボックスのように表示 -->
+                        ビール <span class="toggle-icon">＋</span>
+                    </div>
                     <ul class="single-gacha-list hidden">
                         <li class="list-item">
                             <label><input type="checkbox" name="vegetables" value="アサヒ"> アサヒ</label>
@@ -247,7 +270,12 @@
                     </ul>
                 </div>
                 <div class="genre">
-                    <div class="list-header">その他</div>
+                    <div class="list-header">
+                        <label class="single-all-label">
+                            <input type="checkbox" class="single-all-checkbox"> 
+                        </label> <!-- チェックボックスのように表示 -->
+                        その他 <span class="toggle-icon">＋</span>
+                    </div>
                     <ul class="single-gacha-list hidden">
                         <li class="list-item">
                             <label><input type="checkbox" name="vegetables" value="クライナー"> クライナー</label>
@@ -277,7 +305,7 @@
                             <label><input type="checkbox" name="vegetables" value="赤ワイン"> 赤ワイン</label>
                         </li>
                         <li class="list-item">
-                            <label><input type="checkbox" name="vegetables" value="赤魂パンチ"> 赤魂パンチ</label>
+                            <label><input type="checkbox" name="vegetables" value="赤玉パンチ"> 赤玉パンチ</label>
                         </li>
                         <li class="list-item">
                             <label><input type="checkbox" name="vegetables" value="白ワイン"> 白ワイン</label>
@@ -303,7 +331,7 @@
         <section class="section">
             <div class="list-container">
                 <div class="genre">
-                    <div class="list-header">お酒</div>
+                    <div class="list-header">お酒 <span class="toggle-icon">＋</span></div>
                     <ul class="fruit-list hidden">
                         <li class="list-item-sake">
                             <label><input type="checkbox" name="fruits" value="焼酎">焼酎</label>
@@ -362,7 +390,7 @@
                     </ul>
                 </div>
                 <div class="genre">
-                    <div class="list-header">割材</div>
+                    <div class="list-header">割材 <span class="toggle-icon">＋</span> </div>
                     <ul class="vegetable-list hidden">
                         <li class="list-item-wari">
                             <label><input type="checkbox" name="vegetables" value="水"> 水</label>
@@ -418,6 +446,9 @@
             <div class="comment-section">
                 <h2>コメント欄</h2>
 
+                <p>味の感想を書いてみよう！</p>
+                <p style="opacity: 0.5; font-size: 1rem;">※個人が特定される内容や、<br>誹謗中傷等のコメントはお控えください。</p>
+
                 <!-- ペンネーム入力 -->
             <label for="pen-name">ペンネーム:</label>
             <input type="text" id="pen-name" class="pen-name" placeholder="ペンネームを入力してください" required>
@@ -440,11 +471,6 @@
                     <!-- コメントがここに表示される -->
                 </div>
             </div>
-        </section>
-
-        <section id="contact">
-                <h2>お問い合わせ</h2>
-                <p>ここがお問い合わせセクションです。</p>
         </section>
     </div>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>

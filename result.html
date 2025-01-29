@@ -6,14 +6,18 @@
     <title>結果ページ</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
             text-align: center;
             padding: 20px;
+            background-color: #ffb922;
+            font-family: 'YDW Bananaslip Plus', sans-serif;
+            background-image: url('images/beer_illust.png'), url('images/wine_illust.png'), url('images/tyami_illust.png'), url('images/rock_illust.png');
+            background-position: 10px 10px, calc(100%) 10px, 10px calc(100% - 10px), calc(100% ) calc(100% - 10px);
+            background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
+            background-size: 100px 100px, 100px 100px, 100px 100px, 100px 100px;
         }
         .result {
-            font-size: 4rem;
-            font-weight: bold;
-            color: #4caf50;
+            font-size: 3rem;
+            color: #4b0a00;
             margin-top: 20px;
         }
 
@@ -22,81 +26,111 @@
             width: 500px; /* 幅を500pxに固定 */
             max-width: 90%; /* 画面幅の90%を超えないようにする */
             height: auto; /* アスペクト比を維持 */
-            left: 50%; /* 親要素の幅の50% */
+             margin-top: -30px; /* 上に移動 */
         }
 
         .backButton {
             margin-top: 20px;
             padding: 10px 20px;
-            background-color: #4caf50;
-            color: white;
+            background-color: #f0f0f0;
+            color: #4b0a00;
             text-decoration: none;
             border-radius: 15px;
             display: inline-block;
-            font-size: 3rem;
+            font-size: 2rem;
         }
+
+        p {
+            font-size: 1.5rem;
+        }
+
     </style>
 </head>
 <body>
     <h1>ガチャ結果</h1>
     <p class="result" id="result">結果を取得中...</p>
     <img id="result-image" class="result-image" src="" alt="ガチャ結果の画像" style="display: none;">
+    <p class="result-message" id="result-message"></p> <!-- メッセージ表示用 -->
     <a href="index.html#single-gacha-button" class="backButton" >戻る</a>
-
+    
     <script>
-        // クエリパラメータから結果を取得
-        const params = new URLSearchParams(window.location.search);
-        const result = params.get('item');
-        const result02 = params.get('item02');
-
-        // 結果を表示
-        // if (result) {
-        //     document.getElementById('result').textContent = result;
-        // } else {
-        //     document.getElementById('result').textContent = 'エラー: 結果がありません。';
-        // }
-        
-        // URLパラメータから結果を取得
-        const singleResult = params.get('single');
-
-        // 結果を表示するテキスト
-        const resultText = document.getElementById('result');
-        if (result) {
-            resultText.textContent = ` ${result}`;
-
-            // 画像マッピング
-            const singleImageMapping = {
-                "澪": "images/mio.png",
-                "ワンカップ": "images/onecup.png",
-                "上善如水": "images/jozen.png",
-                "まる": "images/maru.png",
-                "松竹梅": "images/syotiku.png",
-                "キンミヤ": "images/kinmiya.png",
-                "鏡月": "images/kyogetu.png",
-                "いいちこ": "images/iichiko.png",
-                "黒霧島": "images/kurogiri.png",
-                "吟香鳥飼": "images/torikai.png",
-                "JJ": "images/jj.png",
-                "チャミスル": "images/chami.png",
-                "グレープフルーツサワー": "images/gurehuru.png",
-                "グレープサワー": "images/grepu.png",
-                "ほろよい": "images/horoyoi.png",
-            };
-
-            // 結果に対応する画像を取得
-            const resultImage = document.getElementById('result-image');
-            const imagePath = singleImageMapping[result];
-
-            if (imagePath) {
-                resultImage.src = imagePath;
-                resultImage.style.display = 'block';
+            // クエリパラメータから結果を取得
+            const params = new URLSearchParams(window.location.search);
+            const result = params.get('item');
+            console.log("取得したアイテム:", result); // デバッグ用ログ
+    
+            // 結果を表示
+            const resultText = document.getElementById('result');
+            const resultMessage = document.getElementById('result-message'); // メッセージを表示する要素
+    
+            if (result) {
+                resultText.textContent = `${result}`;
+    
+                // 画像マッピングとアイテムごとのメッセージ
+                const singleImageMapping = {
+                    "澪": {image: "images/mio.png", message: "個人的に一番飲みやすい日本酒です。"},
+                    "ワンカップ": {image: "images/onecup.png", message: null},
+                    "上善如水": {image: "images/jozen.png", message: null},
+                    "まる": {image: "images/maru.png", message: null},
+                    "松竹梅": {image: "images/syotiku.png", message: null},
+                    "キンミヤ": {image: "images/kinmiya.png", message: "くせがなくて飲みやすい焼酎です"},
+                    "鏡月": {image: "images/kyogetu.png", message: "王道焼酎。"},
+                    "いいちこ": {image: "images/iichiko.png", message: null},
+                    "黒霧島": {image: "images/kurogiri.png", message: null},
+                    "吟香鳥飼": {image: "images/torikai.png", message: "デザインがとても好きです。"},
+                    "JJ": {image: "images/jj.png", message: "関西では定番の焼酎です。"},
+                    "チャミスル": {image: "images/chami.png", message: "私が一番好きなお酒です。おすすめはマスカット。午後の紅茶ストレートで割るとおいしいですよ。"},
+                    "グレープフルーツサワー": {image: "images/gurehuru.png", message: null},
+                    "グレープサワー": {image: "images/grepu.png", message: null},
+                    "ほろよい": {image: "images/horoyoi.png", message: "初心者におすすめ‼種類が多いので自分の好きな味をさがしてみては？"},
+                    "こだわり酒場のれもんサワー": {image: "images/kodawari.png", message: null},
+                    "贅沢絞り": {image: "images/zeitaku.png", message: null},
+                    "ストロングゼロ": {image: "images/sutozero.png", message: "何度もこのお酒に殺されました。。"},
+                    "レモンサワー": {image: "images/lemon.png", message: null},
+                    "氷結": {image: "images/hyoketu.png", message: null},
+                    "男梅サワー": {image: "images/otoko.png", message: "漢！！！！！！"},
+                    "スミノフアイス": {image: "images/suminofu.png", message: "飲みやすい！"},
+                    "アサヒ": {image: "images/gomen.png", message: null},
+                    "サッポロ": {image: "images/gomen.png", message: null},
+                    "クラシック": {image: "images/gomen.png", message: null},
+                    "プレモル": {image: "images/gomen.png", message: null},
+                    "エビス": {image: "images/gomen.png", message: null},
+                    "サントリー": {image: "images/gomen.png", message: null},
+                    "一番搾り": {image: "images/gomen.png", message: null},
+                    "よなよなエール": {image: "images/gomen.png", message: null},
+                    "水曜日の猫": {image: "images/gomen.png", message: null},
+                    "ハイネケン": {image: "images/gomen.png", message: null},
+                    "コロナ": {image: "images/gomen.png", message: null},
+                    "クライナー": {image: "images/gomen.png", message: "ブルーベリーがおいしいです。うぇい"},
+                    "ニッカウイスキー": {image: "images/gomen.png", message: "ロックで飲める人って大人ですよね"},
+                    "ウォッカ": {image: "images/gomen.png", message: "テキーラよりこっちのほうが飲めるという人をみたことがあります。私はどっちも苦手です。。"},
+                    "テキーラ": {image: "images/gomen.png", message: "一杯確定！！ぐい！！！"},
+                    "シャンパン": {image: "images/gomen.png", message: "誰かの誕生日に入れがち"},
+                    "ジン": {image: "images/gomen.png", message: "ゴン＝フリークスの父じゃないよ"},
+                    "コカレロ": {image: "images/gomen.png", message: "エナジードリンクと混ぜたらとんでもないことになります。"},
+                    "梅酒": {image: "images/gomen.png", message: "自作してみたいお酒ナンバーワン"},
+                    "赤ワイン": {image: "images/gomen.png", message: "お肉に合います。"},
+                    "赤玉パンチ": {image: "images/gomen.png", message: null},
+                    "白ワイン": {image: "images/gomen.png", message: "おしゃれ！"}
+                };
+    
+                const selectedItem = singleImageMapping[result];
+    
+                if (selectedItem) {
+                    const resultImage = document.getElementById('result-image');
+                    resultImage.src = selectedItem.image;
+                    resultImage.style.display = 'block';
+    
+                    if (selectedItem.message) {
+                        resultMessage.textContent = selectedItem.message;
+                    } else {
+                        resultMessage.textContent = ""; // メッセージがない場合は空にする
+                    }
+                
+                }
             } else {
-                resultImage.alt = "画像が見つかりません";
+                resultText.textContent = "エラー: 結果がありません。";
             }
-        } else {
-            resultText.textContent = "エラー: 結果がありません。";
-        }
-
     </script>
 </body>
 </html>

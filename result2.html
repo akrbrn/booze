@@ -9,22 +9,28 @@
             font-family: Arial, sans-serif;
             text-align: center;
             padding: 20px;
+            background-color: #ffb922;
+            font-family: 'YDW Bananaslip Plus', sans-serif;
+            background-image: url('images/beer_illust.png'), url('images/wine_illust.png'), url('images/tyami_illust.png'), url('images/rock_illust.png');
+            background-position: 10px 10px, calc(100%) 10px, 10px calc(100% - 10px), calc(100% ) calc(100% - 10px);
+            background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
+            background-size: 100px 100px, 100px 100px, 100px 100px, 100px 100px;
         }
         .result {
             font-size: 2rem;
             font-weight: bold;
-            color: #4caf50;
+            color: #4b0a00;
             margin-top: 20px;
         }
         .back-button {
             margin-top: 20px;
             padding: 10px 20px;
-            background-color: #4caf50;
-            color: white;
+            background-color: #f0f0f0;
+            color: #4b0a00;
             text-decoration: none;
             border-radius: 15px;
             display: inline-block;
-            font-size: 3rem;
+            font-size: 2rem;
         }
     </style>
 </head>
@@ -48,12 +54,13 @@
             const resultElement = document.getElementById("result");
 
             if (fruit && vegetable) {
-                resultElement.textContent = `${fruit} X ${vegetable}`;
+                resultElement.textContent = `${fruit} × ${vegetable}`;
             } else {
                 resultElement.textContent = "No selection was made.";
             }
         });
-    </script>
+    </script> 
+
     <a href="index.html#double-gacha-button" class="back-button">戻る</a>
 
 </body>

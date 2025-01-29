@@ -1,74 +1,99 @@
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', () => {
     const menuToggle = document.getElementById('menuToggle');
     const navMenu = document.getElementById('navMenu');
     const navOverlay = document.getElementById('navOverlay');
-    
+    const navLinks = document.querySelectorAll('#navMenu a'); // ナビゲーション内のリンクを取得
+    const video = document.getElementById('loading-video');
+    const videoContainer = document.getElementById('loading-screen');
+    const mainContent = document.getElementById('main-content');
+    const singleGachaButton = document.getElementById('single-gacha-button');
+    const gifImage = document.getElementById('gif-image');
+    const gifContainer = document.getElementById('gif-container');
+    const gifDuration = 3000;
+    const sections = document.querySelectorAll('.section');
+    const triggerPoint = window.innerHeight * 0.8;
+    const isFirstLoad = !sessionStorage.getItem('isFirstLoad');
 
-    // メニューの開閉を切り替える関数
-    const toggleMenu = () => {
-        menuToggle.classList.toggle('active');
-        navMenu.classList.toggle('active');
-        navOverlay.classList.toggle('active');
+    // ハンバーガーメニューの処理
+    const closeMenu = () => {
+        menuToggle.classList.remove('active');
+        navMenu.classList.remove('active');
+        navOverlay.classList.remove('active');
     };
 
-    // ハンバーガーメニュークリックでメニュー表示
+    const toggleMenu = () => {
+        const isMenuOpen = menuToggle.classList.contains('active');
+        if (isMenuOpen) {
+            closeMenu();
+        } else {
+            menuToggle.classList.add('active');
+            navMenu.classList.add('active');
+            navOverlay.classList.add('active');
+        }
+    };
+
     menuToggle.addEventListener('click', toggleMenu);
+    navOverlay.addEventListener('click', closeMenu); // オーバーレイをクリックしたら閉じる
 
-    // オーバーレイクリックでメニュー非表示
-    navOverlay.addEventListener('click', toggleMenu);
-
-    // ナビゲーションリンククリックでスムーズスクロール & メニューを閉じる
-    document.querySelectorAll('#navMenu a').forEach(link => {
-        link.addEventListener('click', (event) => {
-            event.preventDefault();
-
-            // 対象セクションへスムーズスクロール
-            const targetId = link.getAttribute('href').substring(1);
-            const targetElement = document.getElementById(targetId);
-            if (targetElement) {
-                targetElement.scrollIntoView({ 
-                    behavior: 'smooth',
-                    block: 'center' // 要素が画面中央に来るように設定
-                });
-            }
-
-            // メニューを閉じる
-            toggleMenu();
-        });
+    // ナビゲーションリンクをクリックした際の処理
+    navLinks.forEach(link => {
+        link.addEventListener('click', closeMenu); // 各リンクに closeMenu を設定
     });
-});
 
-const isFirstLoad = sessionStorage.getItem('isFirstLoad');
+    // 初回ロード時の処理
+    if (isFirstLoad) {
+        let isVideoEnded = false;
 
-document.addEventListener("DOMContentLoaded", function() {
-    const video = document.getElementById("loading-video");
-    const videoContainer = document.getElementById("loading-screen");
-    const mainContent = document.getElementById("main-content");
-    const sections = document.querySelectorAll('.section');
-    const triggerPoint = window.innerHeight * 0.8; // トリガー位置（画面下から80%）
-
-    if (!isFirstLoad) {
-        window.addEventListener('load', () => {
-            const loadingScreen = document.getElementById('loading-screen');
-            // const mainContent = document.getElementById('main-content');
-        
-             // 動画がロードされるまで待つ
-            loadingVideo.onloadeddata = () => {
-                // 動画の準備完了後にフェードアウト開始
-                setTimeout(() => {
-                    loadingScreen.style.transition = 'opacity 0.5s';
-                    loadingScreen.style.opacity = '0';
-                    setTimeout(() => {
-                        loadingScreen.style.display = 'none';
-                    }, 500); // フェードアウトのタイミングに合わせる
-                }, 3000); // 必要に応じて再生時間を設定
-            };
+        // 動画が終了した場合の処理
+        video.addEventListener('ended', () => {
+            isVideoEnded = true;
+            videoContainer.style.transition = 'opacity 0.5s';
+            videoContainer.style.opacity = '0';
+            setTimeout(() => {
+                videoContainer.style.display = 'none';
+                mainContent.style.display = 'block';
+            }, 500);
         });
-        // 動画が終了したらトップページを表示
-    video.addEventListener("ended", function() {
-        videoContainer.style.display = "none"; // 動画コンテナを非表示
-        mainContent.style.display = "block"; // トップページを表示
 
+        // 動画がロードされた場合のフォールバック処理（タイムアウト）
+        video.onloadeddata = () => {
+            setTimeout(() => {
+                if (!isVideoEnded) {
+                    videoContainer.style.transition = 'opacity 0.5s';
+                    videoContainer.style.opacity = '0';
+                    setTimeout(() => {
+                        videoContainer.style.display = 'none';
+                        mainContent.style.display = 'block';
+                    }, 500);
+                }
+            }, video.duration * 1000); // 動画の再生時間に基づくタイムアウト
+        };
+
+        sessionStorage.setItem('isFirstLoad', true);
+    } else {
+        videoContainer.style.display = 'none';
+        mainContent.style.display = 'block';
+    }
+
+    // 単発ガチャ
+    singleGachaButton.addEventListener('click', () => {
+        const selectedItems = Array.from(document.querySelectorAll('.list-item input[type="checkbox"]:checked'))
+            .map(checkbox => checkbox.value);
+
+        if (selectedItems.length > 0) {
+            const randomItem = selectedItems[Math.floor(Math.random() * selectedItems.length)];
+            gifImage.src = 'images/gacha.gif?timestamp=' + new Date().getTime();
+            gifContainer.style.display = 'flex';
+            setTimeout(() => {
+                const resultPageUrl = `result.html?item=${encodeURIComponent(randomItem)}`;
+                window.location.href = resultPageUrl;
+            }, gifDuration);
+        } else {
+            alert('単発ガチャの対象を1つ以上選択してください！');
+        }
+    });
+
+    // スクロール時のアニメーション
     const handleScroll = () => {
         sections.forEach(section => {
             const rect = section.getBoundingClientRect();
@@ -77,64 +102,43 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
     };
-
-      // スクロール時に処理
     document.addEventListener('scroll', handleScroll);
-
-      // ページ読み込み時に一度チェック
-handleScroll();
-    });
-        // セッションストレージにフラグを保存
-        sessionStorage.setItem('isFirstLoad', true);
-    } else {
-        // 2回目以降のアクセス時の処理を記述
-            videoContainer.style.display = "none"; // 動画コンテナを非表示
-            mainContent.style.display = "block"; // トップページを表示
-
-        const handleScroll = () => {
-            sections.forEach(section => {
-                const rect = section.getBoundingClientRect();
-                if (rect.top < triggerPoint) {
-                    section.classList.add('visible');
-                }
-            });
-        };
-    
-          // スクロール時に処理
-        document.addEventListener('scroll', handleScroll);
-    
-          // ページ読み込み時に一度チェック
-        handleScroll();
-        cnsole.log('2回目以降のアクセスです');
-    }
-
-    
+    handleScroll();
 });
-
-// window.addEventListener('load', () => {
-//     const loadingScreen = document.getElementById('loading-screen');
-//     // const mainContent = document.getElementById('main-content');
-
-//      // 動画がロードされるまで待つ
-//     loadingVideo.onloadeddata = () => {
-//         // 動画の準備完了後にフェードアウト開始
-//         setTimeout(() => {
-//             loadingScreen.style.transition = 'opacity 0.5s';
-//             loadingScreen.style.opacity = '0';
-//             setTimeout(() => {
-//                 loadingScreen.style.display = 'none';
-//             }, 500); // フェードアウトのタイミングに合わせる
-//         }, 3000); // 必要に応じて再生時間を設定
-//     };
-// });
 
 
 document.querySelectorAll('.list-header').forEach(header => {
-        header.addEventListener('click', () => {
-            const listItems = header.nextElementSibling;
-            listItems.classList.toggle('hidden');
-        });
+    header.addEventListener('click', (event) => {
+        const listItems = header.nextElementSibling; // 次の<ul>を取得
+        const icon = header.querySelector('.toggle-icon'); // アイコンを取得
+
+        // チェックボックスがクリックされた場合は、開閉を防ぐ
+        if (!event.target.closest('input[type="checkbox"]')) {
+            listItems.classList.toggle('hidden'); // リストの表示・非表示を切り替え
+        }
+
+        // アイコンの更新
+        if (icon) {
+            if (listItems.classList.contains('hidden')) {
+                icon.textContent = '＋'; // リストが閉じているとき
+            } else {
+                icon.textContent = '−'; // リストが開いているとき
+            }
+        }
     });
+});
+
+// ジャンルのチェックボックスをクリックした際に、リスト内のチェックボックスを制御する
+document.querySelectorAll('.single-all-checkbox').forEach(checkbox => {
+    checkbox.addEventListener('change', (event) => {
+        const genreContainer = checkbox.closest('.genre'); // 親のジャンルを取得
+        const checkboxes = genreContainer.querySelectorAll('input[type="checkbox"]:not(.single-all-checkbox)'); // 「全選択 / 解除」を除くチェックボックス
+
+        // チェックボックスの状態に合わせて全選択 / 解除
+        checkboxes.forEach(item => item.checked = event.target.checked);
+    });
+});
+
 
     const singleGachaButton = document.getElementById('single-gacha-button');
     const gifContainer = document.getElementById('gif-container');
@@ -252,49 +256,51 @@ doubleGachaButton.addEventListener('click', () => {
         }
     });
 
-    document.addEventListener("DOMContentLoaded", () => {
         const commentInput = document.getElementById("commentInput");
         const penNameInput = document.getElementById("pen-name");
         const ageInput = document.getElementById("age");
         const submitButton = document.getElementById("submitComment");
         const commentList = document.getElementById("commentList");
-    
+
         // コメントを投稿する機能
         submitButton.addEventListener("click", () => {
             const commentText = commentInput.value.trim();
             const penName = penNameInput.value.trim();
             const age = ageInput.value;
-    
+
             // バリデーションチェック
             if (commentText === "" || penName === "" || age === "") {
                 alert("ペンネーム、年代、コメントを入力してください！");
                 return;
             }
-    
+
             // コメントをリストに追加
             addCommentToList(penName, age, commentText);
-    
+
             // 入力欄をクリア
             commentInput.value = "";
             penNameInput.value = "";
             ageInput.value = "";
+
+            // コメントを localStorage に保存
+            saveCommentsToLocalStorage();
         });
-    
+
         // コメントをリストに追加する関数
         function addCommentToList(penName, age, commentText) {
             const commentElement = document.createElement("div");
             commentElement.className = "comment";
-    
+
             // ペンネームと年代の表示
             const metaElement = document.createElement("div");
             metaElement.className = "meta";
             metaElement.textContent = `${penName} (${age})`;
-    
+
             // コメント本文の表示
             const commentContent = document.createElement("span");
             commentContent.className = "comment-text";
             commentContent.textContent = commentText;
-    
+
             // 削除ボタン
             const deleteButton = document.createElement("button");
             deleteButton.className = "delete-button";
@@ -302,225 +308,186 @@ doubleGachaButton.addEventListener('click', () => {
             deleteButton.addEventListener("click", () => {
                 // コメントを削除
                 commentList.removeChild(commentElement);
+
+                // コメント削除後、localStorageも更新
+                saveCommentsToLocalStorage();
             });
-    
+
             // コメント要素を構築
             commentElement.appendChild(metaElement); // ペンネームと年代
             commentElement.appendChild(commentContent); // コメント本文
             commentElement.appendChild(deleteButton); // 削除ボタン
-    
+
             // リストに追加
             commentList.appendChild(commentElement);
         }
-    });
+
+        // localStorage からコメントをロード
+        function loadCommentsFromLocalStorage() {
+            const comments = JSON.parse(localStorage.getItem("comments")) || [];
+            comments.forEach(comment => {
+                addCommentToList(comment.penName, comment.age, comment.commentText);
+            });
+        }
+
+        // コメントを localStorage に保存
+        function saveCommentsToLocalStorage() {
+            const comments = [];
+            const commentElements = document.querySelectorAll(".comment");
+
+            commentElements.forEach(element => {
+                const meta = element.querySelector(".meta").textContent;
+                const commentText = element.querySelector(".comment-text").textContent;
+
+                // metaからペンネームと年代を抽出
+                const [penName, age] = meta.replace(/[\(\)]/g, "").split(" ");
+
+                comments.push({
+                    penName,
+                    age,
+                    commentText
+                });
+            });
+
+            // localStorage に保存
+            localStorage.setItem("comments", JSON.stringify(comments));
+        }
+
+        // ページ読み込み時にコメントをロード
+        window.onload = loadCommentsFromLocalStorage;
     
 
-    //フロントエンドからAPIとの通信
-    fetch('/api/comments', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ comment: commentText }),
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log("コメントが保存されました:", data);
-    });
-    
-//結果の画像を送る
-    const singleButton = document.getElementById("single-gacha-button");
-singleButton.addEventListener("click", () => {
-    const selectedItems = Array.from(singleListCheckboxes)
-        .filter(checkbox => checkbox.checked)
-        .map(checkbox => checkbox.value);
-
-    if (selectedItems.length > 0) {
-        const randomItem = selectedItems[Math.floor(Math.random() * selectedItems.length)];
-        // 結果ページにランダムアイテムを渡す
-        window.location.href = `result.html?single=${encodeURIComponent(randomItem)}`;
-    } else {
-        alert("単発ガチャの対象を1つ以上選択してください！");
-    }
-});
 
 
 //-----------------------ここから上長谷川
 
-
-
-
-
-// // 全てのジャンル見出しを取得
-// const headers = document.querySelectorAll('.list-header');
-
-// headers.forEach(header => {
-//     header.addEventListener('click', () => {
-//         // 対象のリストアイテムを取得
-//         const listItems = header.nextElementSibling;
-//         // 表示状態を切り替え
-//         listItems.classList.toggle('hidden');
-//     });
-// });
-//   // チェックボックスの状態を保存
-// const saveSelection = () => {
-//     const selectedItems = [];
-//     checkboxes.forEach((checkbox) => {
-//         if (checkbox.checked) {
-//             selectedItems.push(checkbox.value);
-//         }
-//     });
-//     localStorage.setItem(STORAGE_KEY, JSON.stringify(selectedItems));
-// };
-
-// // ページロード時に選択状態を復元
-// const loadSelection = () => {
-//     const savedItems = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-//     checkboxes.forEach((checkbox) => {
-//         checkbox.checked = savedItems.includes(checkbox.value);
-//     });
-// };
-
-// // イベントリスナーを追加
-// checkboxes.forEach((checkbox) => {
-//     checkbox.addEventListener("change", saveSelection);
-// });
-
-// // 初期化：状態を復元
-// loadSelection();
-
-// // 結果ページへのリンクを動的に生成
-// document.getElementById("result-button").addEventListener("click", () => {
-//     const selectedItems = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-//     if (selectedItems.length > 0) {
-//         const randomItem = selectedItems[Math.floor(Math.random() * selectedItems.length)];
-//         // GIFアニメーションを表示
-//         gifContainer.style.display = "block";
-
-//         // アニメーション後に結果ページに移動
-//         setTimeout(() => {
-//             window.location.href = `result.html?item=${encodeURIComponent(randomItem)}`;
-//         }, 2000); // 2秒後にページ遷移（アニメーションの長さに合わせて調整）
-//     } else {
-//         alert("アイテムを選択してください！");
-//     }
-// });
-
-// // 単発ガチャ
-// const singleListCheckboxes = document.querySelectorAll('#single-gacha-list input[type="checkbox"]');
-// const singleButton = document.getElementById("single-gacha-button");
-// singleButton.addEventListener("click", () => {
-//     const selectedItems = Array.from(singleListCheckboxes)
-//         .filter(checkbox => checkbox.checked)
-//         .map(checkbox => checkbox.value);
-
-//     if (selectedItems.length > 0) {
-//         const randomItem = selectedItems[Math.floor(Math.random() * selectedItems.length)];
-//         window.location.href = `result.html?single=${encodeURIComponent(randomItem)}`;
-//     } else {
-//         alert("単発ガチャの対象を1つ以上選択してください！");
-//     }
-// });
-//  // 2リストガチャ
-// const fruitCheckboxes = document.querySelectorAll('#fruit-list input[type="checkbox"]');
-// const vegetableCheckboxes = document.querySelectorAll('#vegetable-list input[type="checkbox"]');
-// document.getElementById("double-gacha-button").addEventListener("click", () => {
-//     const selectedFruits = Array.from(fruitCheckboxes)
-//         .filter(checkbox => checkbox.checked)
-//         .map(checkbox => checkbox.value);
-
-//     const selectedVegetables = Array.from(vegetableCheckboxes)
-//         .filter(checkbox => checkbox.checked)
-//         .map(checkbox => checkbox.value);
-
-// if (selectedFruits.length > 0 && selectedVegetables.length > 0) {
-//          const randomFruit = selectedFruits[Math.floor(Math.random() * selectedFruits.length)];
-//          const randomVegetable = selectedVegetables[Math.floor(Math.random() * selectedVegetables.length)];
-//         window.location.href = `result2.html?fruit=${encodeURIComponent(randomFruit)}&vegetable=${encodeURIComponent(randomVegetable)}`;
-//     } else {
-//     alert("フルーツと野菜をそれぞれ1つ以上選択してください！");
-//     }
-// });
-
-
-
-
 // document.addEventListener('DOMContentLoaded', function () {
-//     // ▼ 単発ガチャ処理 ▼
-//     const singleListCheckboxes = document.querySelectorAll('#single-gacha-list input[type="checkbox"]');
-//     const singleButton = document.getElementById('single-gacha-button');
+//     const menuToggle = document.getElementById('menuToggle');
+//     const navMenu = document.getElementById('navMenu');
+//     const navOverlay = document.getElementById('navOverlay');
+    
 
-//     singleButton.addEventListener('click', () => {
-//         const selectedItems = Array.from(singleListCheckboxes)
-//             .filter(checkbox => checkbox.checked)
-//             .map(checkbox => checkbox.value);
-
-//         if (selectedItems.length > 0) {
-//             const randomItem = selectedItems[Math.floor(Math.random() * selectedItems.length)];
-//             window.location.href = `result.html?item=${encodeURIComponent(randomItem)}`;
-//         } else {
-//             alert('単発ガチャの対象を1つ以上選択してください！');
-//         }
-//     });
-
-//     // ▼ 2リストガチャ処理 ▼
-//     const fruitCheckboxes = document.querySelectorAll('#fruit-list input[type="checkbox"]');
-//     const vegetableCheckboxes = document.querySelectorAll('#vegetable-list input[type="checkbox"]');
-//     const doubleButton = document.getElementById('double-gacha-button');
-
-//     doubleButton.addEventListener('click', () => {
-//         const selectedFruits = Array.from(fruitCheckboxes)
-//             .filter(checkbox => checkbox.checked)
-//             .map(checkbox => checkbox.value);
-
-//         const selectedVegetables = Array.from(vegetableCheckboxes)
-//             .filter(checkbox => checkbox.checked)
-//             .map(checkbox => checkbox.value);
-
-//         if (selectedFruits.length > 0 && selectedVegetables.length > 0) {
-//             const randomFruit = selectedFruits[Math.floor(Math.random() * selectedFruits.length)];
-//             const randomVegetable = selectedVegetables[Math.floor(Math.random() * selectedVegetables.length)];
-//             window.location.href = `result2.html?fruit=${encodeURIComponent(randomFruit)}&vegetable=${encodeURIComponent(randomVegetable)}`;
-//         } else {
-//             alert('フルーツと野菜をそれぞれ1つ以上選択してください！');
-//         }
-//     });
-
-//     // ▼ 共通処理 ▼
-//     // ジャンルリストの表示/非表示切り替え
-//     document.querySelectorAll('.list-header').forEach(header => {
-//         header.addEventListener('click', () => {
-//             const listItems = header.nextElementSibling;
-//             listItems.classList.toggle('hidden');
-//         });
-//     });
-
-//     // ▼ チェックボックスの状態保存/復元 ▼
-//     const STORAGE_KEY = "selected_items";
-//     const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-
-//     // チェック状態を保存
-//     const saveSelection = () => {
-//         const selectedItems = Array.from(checkboxes)
-//             .filter(checkbox => checkbox.checked)
-//             .map(checkbox => checkbox.value);
-//         localStorage.setItem(STORAGE_KEY, JSON.stringify(selectedItems));
+//     // メニューの開閉を切り替える関数
+//     const toggleMenu = () => {
+//         menuToggle.classList.toggle('active');
+//         navMenu.classList.toggle('active');
+//         navOverlay.classList.toggle('active');
 //     };
 
-//     // チェック状態を復元
-//     const loadSelection = () => {
-//         const savedItems = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-//         checkboxes.forEach((checkbox) => {
-//             checkbox.checked = savedItems.includes(checkbox.value);
+//     // ハンバーガーメニュークリックでメニュー表示
+//     menuToggle.addEventListener('click', toggleMenu);
+
+//     // オーバーレイクリックでメニュー非表示
+//     navOverlay.addEventListener('click', toggleMenu);
+
+//     // ナビゲーションリンククリックでスムーズスクロール & メニューを閉じる
+//     document.querySelectorAll('#navMenu a').forEach(link => {
+//         link.addEventListener('click', (event) => {
+//             event.preventDefault();
+
+//             // 対象セクションへスムーズスクロール
+//             const targetId = link.getAttribute('href').substring(1);
+//             const targetElement = document.getElementById(targetId);
+//             if (targetElement) {
+//                 targetElement.scrollIntoView({ 
+//                     behavior: 'smooth',
+//                     block: 'center' // 要素が画面中央に来るように設定
+//                 });
+//             }
+
+//             // メニューを閉じる
+//             toggleMenu();
 //         });
-//     };
-
-//     // 状態保存用イベントリスナー追加
-//     checkboxes.forEach((checkbox) => {
-//         checkbox.addEventListener("change", saveSelection);
 //     });
-
-//     // 初期化：状態を復元
-//     loadSelection();
 // });
-// console.log(selectedItems); // チェックされたアイテムの配列を確認
+
+// const isFirstLoad = sessionStorage.getItem('isFirstLoad');
+
+// document.addEventListener("DOMContentLoaded", function() {
+//     const video = document.getElementById("loading-video");
+//     const videoContainer = document.getElementById("loading-screen");
+//     const mainContent = document.getElementById("main-content");
+//     const sections = document.querySelectorAll('.section');
+//     const triggerPoint = window.innerHeight * 0.8; // トリガー位置（画面下から80%）
+
+//     if (!isFirstLoad) {
+//         window.addEventListener('load', () => {
+//             const loadingScreen = document.getElementById('loading-screen');
+//             // const mainContent = document.getElementById('main-content');
+        
+//              // 動画がロードされるまで待つ
+//             loadingVideo.onloadeddata = () => {
+//                 // 動画の準備完了後にフェードアウト開始
+//                 setTimeout(() => {
+//                     loadingScreen.style.transition = 'opacity 0.5s';
+//                     loadingScreen.style.opacity = '0';
+//                     setTimeout(() => {
+//                         loadingScreen.style.display = 'none';
+//                     }, 500); // フェードアウトのタイミングに合わせる
+//                 }, 3000); // 必要に応じて再生時間を設定
+//             };
+//         });
+//         // 動画が終了したらトップページを表示
+//     video.addEventListener("ended", function() {
+//         videoContainer.style.display = "none"; // 動画コンテナを非表示
+//         mainContent.style.display = "block"; // トップページを表示
+
+//     const handleScroll = () => {
+//         sections.forEach(section => {
+//             const rect = section.getBoundingClientRect();
+//             if (rect.top < triggerPoint) {
+//                 section.classList.add('visible');
+//             }
+//         });
+//     };
+
+//       // スクロール時に処理
+//     document.addEventListener('scroll', handleScroll);
+
+//       // ページ読み込み時に一度チェック
+// handleScroll();
+//     });
+//         // セッションストレージにフラグを保存
+//         sessionStorage.setItem('isFirstLoad', true);
+//     } else {
+//         // 2回目以降のアクセス時の処理を記述
+//             videoContainer.style.display = "none"; // 動画コンテナを非表示
+//             mainContent.style.display = "block"; // トップページを表示
+
+//         const handleScroll = () => {
+//             sections.forEach(section => {
+//                 const rect = section.getBoundingClientRect();
+//                 if (rect.top < triggerPoint) {
+//                     section.classList.add('visible');
+//                 }
+//             });
+//         };
+    
+//           // スクロール時に処理
+//         document.addEventListener('scroll', handleScroll);
+    
+//           // ページ読み込み時に一度チェック
+//         handleScroll();
+//         console.log('2回目以降のアクセスです');
+//     }
+
+    
+// });
+
+// window.addEventListener('load', () => {
+//     const loadingScreen = document.getElementById('loading-screen');
+//     // const mainContent = document.getElementById('main-content');
+
+//      // 動画がロードされるまで待つ
+//     loadingVideo.onloadeddata = () => {
+//         // 動画の準備完了後にフェードアウト開始
+//         setTimeout(() => {
+//             loadingScreen.style.transition = 'opacity 0.5s';
+//             loadingScreen.style.opacity = '0';
+//             setTimeout(() => {
+//                 loadingScreen.style.display = 'none';
+//             }, 500); // フェードアウトのタイミングに合わせる
+//         }, 3000); // 必要に応じて再生時間を設定
+//     };
+// });
+

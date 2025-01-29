@@ -34,12 +34,7 @@ header {
     background-repeat: no-repeat;
     height: 120vh; /* ビューポート全体の高さに設定 */
     display: flex;
-    flex-direction: column;
     justify-content: center;
-    align-items: center;
-    color: #fff;
-    text-align: center;
-    z-index: 1000;
 }
 
 h1 {
@@ -90,12 +85,10 @@ a {
 
 /* タイトルロゴアニメーション */
 .animated-logo {
-    width: 150vw; /* ロゴのサイズ */
+    width: 80%; /* ロゴのサイズ */
+    height: auto;    /* アスペクト比を維持 */
+    margin-top: -300px;
     max-width: 300px; /* 大きすぎないように上限を設定 */
-    position: absolute;
-    top: 150px; /* 画面上から100pxの位置 */
-    left: 20%;
-    transform: translateX(-50%); /* 水平中央に配置 */
     animation: logoBounce 3s ease-in-out infinite; /* 3秒ごとに繰り返し */
 }
 
@@ -452,11 +445,20 @@ nav.active {
     border: 1px solid #ddd;
     border-radius: 5px;
     margin-bottom: 5px;
+    align-items: center; /* アイコンとテキストを縦方向中央揃え */
 }
 
 /* リスト全体 */
 #single-gacha-button {
     scroll-margin-top: 50vh; /* ビューポートの半分だけ上に余白を取る */
+}
+
+.toggle-icon {
+    float: right; 
+}
+
+.single-all-label {
+    float: left; 
 }
 
 #double-gacha-button {
@@ -651,7 +653,8 @@ button:hover {
     }
 
     .animated-logo {
-        width: 1000px; /* PC用にロゴを拡大 */
+        width: 50%; /* PC用にロゴを拡大 */
+        max-width: 600px; 
     }
 }
 
@@ -663,5 +666,6 @@ button:hover {
     .background-image {
         padding: 40px;
         justify-content: space-between; /* PC用にさらに広げる */
+        background-size: 100%; /* 横幅を画面いっぱいに広げる */
     }
 }
