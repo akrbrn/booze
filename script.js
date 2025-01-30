@@ -149,7 +149,7 @@ document.getElementById('single-gacha-button').addEventListener('click', () => {
     
     singleGachaButton.addEventListener('click', () => {
         // GIFのキャッシュを防ぐ
-        gifImage.src = "images/gacha.gif?timestamp=" + new Date().getTime();
+        gifImage.src = "images/gacha.GIF?timestamp=" + new Date().getTime();
 
         // GIFコンテナを表示
         gifContainer.style.display = 'flex';
