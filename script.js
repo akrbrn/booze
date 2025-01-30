@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (selectedItems.length > 0) {
             const randomItem = selectedItems[Math.floor(Math.random() * selectedItems.length)];
-            gifImage.src = 'images/gacha.gif?timestamp=' + new Date().getTime();
+            gifImage.src = 'images/gacha.GIF?timestamp=' + new Date().getTime();
             gifContainer.style.display = 'flex';
             setTimeout(() => {
                 const resultPageUrl = `result.html?item=${encodeURIComponent(randomItem)}`;
@@ -149,7 +149,7 @@ document.getElementById('single-gacha-button').addEventListener('click', () => {
     
     singleGachaButton.addEventListener('click', () => {
         // GIFのキャッシュを防ぐ
-        gifImage.src = "/booze/images/gacha.GIF?timestamp=" + new Date().getTime();
+        gifImage.src = "images/gacha.GIF?timestamp=" + new Date().getTime();
 
         // GIFコンテナを表示
         gifContainer.style.display = 'flex';
@@ -229,7 +229,7 @@ doubleGachaButton.addEventListener('click', () => {
         const handleButtonClick = () => {
 
             // GIFのキャッシュを防ぐ
-    gifImage.src = 'images/gacha.gif?timestamp=' + new Date().getTime();
+    gifImage.src = 'images/gacha.GIF?timestamp=' + new Date().getTime();
 
     // GIFコンテナを表示
     gifContainer.style.display = 'flex';
