@@ -10,7 +10,7 @@
             text-align: center;
             padding: 20px;
             background-color: #ffb922;
-            font-family: 'YDW Bananaslip Plus', sans-serif;
+            font-family: "YDW Bananaslip Plus";
             background-image: url('images/beer_illust.png'), url('images/wine_illust.png'), url('images/tyami_illust.png'), url('images/rock_illust.png');
             background-position: 10px 10px, calc(100%) 10px, 10px calc(100% - 10px), calc(100% ) calc(100% - 10px);
             background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
@@ -32,13 +32,34 @@
             display: inline-block;
             font-size: 2rem;
         }
+        .ratio {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #4b0a00;
+            margin-top: 10px;
+        }
+        .button {
+            font-family: "YDW Bananaslip Plus";
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #f0f0f0;
+            color: #4b0a00;
+            text-decoration: none;
+            border-radius: 15px;
+            display: inline-block;
+            font-size: 2rem;
+            cursor: pointer;
+            border: none;
+        }
     </style>
 </head>
 <body>
     <h1>ガチャ結果</h1>
     <p class="result" id="result">結果を取得中...</p>
+    <p class="ratio" id="ratio-result">割合</p>
 
     <script>
+        document.addEventListener("DOMContentLoaded", () => {
         //取得したアイテムをHTMLに持ってくる
         const getQueryParams = () => {
             const params = new URLSearchParams(window.location.search);
@@ -49,7 +70,6 @@
         };
 
         // 結果表示
-        document.addEventListener("DOMContentLoaded", () => {
             const { fruit, vegetable } = getQueryParams();
             const resultElement = document.getElementById("result");
 
@@ -58,9 +78,25 @@
             } else {
                 resultElement.textContent = "No selection was made.";
             }
+
+         // 割合ボタンの処理
+        document.getElementById("ratio-button").addEventListener("click", function() {
+            const numbers = [1, 2, 3];
+            let first, second;
+
+        do {
+            first = numbers[Math.floor(Math.random() * numbers.length)];
+            second = numbers[Math.floor(Math.random() * numbers.length)];
+        } while ((first === 2 && second === 2) || (first === 3 && second === 3));
+
+            // 結果を表示
+            document.getElementById("ratio-result").textContent = ` ${first} : ${second}`;
         });
+    });
     </script> 
 
+    <button id="ratio-button" class="button">割合を決める</button>
+    <br>
     <a href="index.html#double-gacha-button" class="back-button">戻る</a>
 
 </body>

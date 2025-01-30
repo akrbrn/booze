@@ -12,7 +12,7 @@ body {
     margin: 0;
     padding: 0;
     line-height: 1.5;
-    font-family: 'YDW Bananaslip Plus', sans-serif;
+    font-family: "YDW Bananaslip Plus";
 
 }
 
@@ -20,8 +20,8 @@ body {
     font-size: 1.3rem; /* 通常の文字サイズ */
 }
 @font-face {
-    font-family: 'YDW Bananaslip Plus';
-    src: url('YDWbananaslipplus.otf"') format('woff2');
+    font-family: "YDW Bananaslip Plus";
+    src: url("YDWbananaslipplus.otf") format("woff2");
     font-weight: normal;
     font-style: normal;
 }
@@ -360,7 +360,7 @@ nav.active {
     box-shadow: 0px 10px 10px rgba(0, 0, 1, 0.3); /* 影の設定 */
     position: relative;
     z-index: 2; /* ボタンが線の上に表示されるように */
-    font-family: 'YDW Bananaslip Plus', sans-serif;
+    font-family: "YDW Bananaslip Plus";
 
 }
 
